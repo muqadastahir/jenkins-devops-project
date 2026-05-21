@@ -5,7 +5,7 @@ pipeline {
 
         stage('Code Fetch') {
             steps {
-                git 'https://github.com/muqadastahir/jenkins-devops-project.git'
+                git branch: 'main', url: 'https://github.com/muqadastahir/jenkins-devops-project.git'
             }
         }
 
