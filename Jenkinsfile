@@ -37,5 +37,23 @@ pipeline {
                 '''
             }
         }
+stage('Kubernetes Deployment') {
+    steps {
+        sh '''
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        kubectl apply -f servicemonitor.yaml
+        '''
+    }
+}
+stage('Prometheus-Grafana Monitoring') {
+            steps {
+                sh '''
+                kubectl get pods -n monitoring
+                kubectl get servicemonitor
+                '''
+            }
+        }
+
     }
 }

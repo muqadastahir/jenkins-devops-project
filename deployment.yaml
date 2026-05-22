@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: flask-container
-        image: muqadasmt/flask-cicd:v1
+        image: muqadasmt/flask-cicd:v2
 
         ports:
         - containerPort: 5000
