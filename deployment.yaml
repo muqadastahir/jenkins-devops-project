@@ -4,7 +4,7 @@ metadata:
   name: flask-deployment
 
 spec:
-  replicas: 2
+  replicas: 1
 
   selector:
     matchLabels:
@@ -18,8 +18,7 @@ spec:
     spec:
       containers:
       - name: flask-container
-        image: flask-cicd:v1
-        imagePullPolicy: Never
+        image: muqadasmt/flask-cicd:v1
 
         ports:
         - containerPort: 5000
