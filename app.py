@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Jenkins CI/CD Pipeline Working Successfully!,webhook testing"
+    return "Automatic Jenkins CI/CD + GitHub Webhook Working Successfully!"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
