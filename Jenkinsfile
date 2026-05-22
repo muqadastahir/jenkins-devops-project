@@ -1,37 +1,40 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
     stages {
 
         stage('Code Fetch') {
             steps {
-                sh 'rm -rf app'
-                sh 'git clone https://github.com/muqadastahir/jenkins-devops-project.git app'
+                checkout scm
+            }
+        }
+
+        stage('Docker Cleanup') {
+            steps {
+                sh '''
+                docker stop flask-container || true
+                docker rm flask-container || true
+                '''
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'cd app && docker build -t muqadasmt/flask-cicd:v1 .'
+                sh '''
+                docker build -t flask-cicd:v1 .
+                '''
             }
         }
 
-        stage('Docker Push') {
+        stage('Docker Run') {
             steps {
-                sh 'docker push muqadasmt/flask-cicd:v1'
-            }
-        }
-
-        stage('Kubernetes Deployment') {
-            steps {
-                sh 'kubectl apply -f app/deployment.yaml --validate=false'
-                sh 'kubectl apply -f app/service.yaml --validate=false'
-            }
-        }
-
-        stage('Monitoring Verification') {
-            steps {
-                sh 'kubectl get pods -n monitoring'
+                sh '''
+                docker run -d --name flask-container -p 5000:5000 flask-cicd:v1
+                '''
             }
         }
     }
