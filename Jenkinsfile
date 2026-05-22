@@ -42,7 +42,6 @@ stage('Kubernetes Deployment') {
         sh '''
           kubectl apply -f deployment.yaml --validate=false
           kubectl apply -f service.yaml --validate=false
-
           kubectl apply -f servicemonitor.yaml --validate=false
         '''
     }
