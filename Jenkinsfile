@@ -5,19 +5,33 @@ pipeline {
 
         stage('Code Fetch') {
             steps {
-                git branch: 'main', url: 'https://github.com/muqadastahir/jenkins-devops-project.git'
+                sh 'rm -rf app'
+                sh 'git clone https://github.com/muqadastahir/jenkins-devops-project.git app'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t flask-cicd:v1 .'
+                sh 'cd app && docker build -t muqadasmt/flask-cicd:v1 .'
             }
         }
 
-        stage('Docker Run') {
+        stage('Docker Push') {
             steps {
-                sh 'docker run -d -p 5000:5000 flask-cicd:v1 || true'
+                sh 'docker push muqadasmt/flask-cicd:v1'
+            }
+        }
+
+        stage('Kubernetes Deployment') {
+            steps {
+                sh 'kubectl apply -f app/deployment.yaml --validate=false'
+                sh 'kubectl apply -f app/service.yaml --validate=false'
+            }
+        }
+
+        stage('Monitoring Verification') {
+            steps {
+                sh 'kubectl get pods -n monitoring'
             }
         }
     }
