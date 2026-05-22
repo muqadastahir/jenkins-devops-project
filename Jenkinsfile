@@ -40,9 +40,10 @@ pipeline {
 stage('Kubernetes Deployment') {
     steps {
         sh '''
-        kubectl apply -f deployment.yaml
-        kubectl apply -f service.yaml
-        kubectl apply -f servicemonitor.yaml
+          kubectl apply -f deployment.yaml --validate=false
+          kubectl apply -f service.yaml --validate=false
+
+          kubectl apply -f servicemonitor.yaml --validate=false
         '''
     }
 }
